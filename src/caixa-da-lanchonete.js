@@ -14,48 +14,58 @@ class CaixaDaLanchonete{
         
         let novoArray = []
         let listaDePreco = []
-        let teste = novoArray.length
+
+        const itensExtra = {
+          cafe: "chantily",
+          sanduiche: "queijo"
+        };
         
+        const itensPrincipais = {
+          chantily: "cafe",
+          queijo: "sanduiche"
+        };
+
         for(let i in itens){
-          
           novoArray.push(itens[i].split(",").shift())
         }
         
         if(!novoArray.length){
           throw new Error('Não há itens no carrinho de compra!')
         }
+
+        for (const itemExtra of novoArray) {
+          const itemPrincipal = itensPrincipais[itemExtra];
+          
+          if (itemPrincipal && !novoArray.includes(itemPrincipal)) {
+            throw new Error('Item extra não pode ser pedido sem o principal');
+          }
+        }
         
         for(let w = 0; w < novoArray.length; w++){
           for(let j = 0; j < cardapioObject.item.length; j++){
             
-            const itensExtra = ['chantily','queijo']
-            const itensPrincipais = ['cafe', 'sanduiche']
-            
             if(!cardapioObject.item.some((codigo) => codigo.codigo === novoArray[w])){
               throw new Error('Item inválido')  
             }
+
             try{
               
               if(novoArray[w] === cardapioObject.item[j].codigo){
                 listaDePreco.push(Number(cardapioObject.item[j].preco))
               }  
-              // if(itensExtra.indexOf(novoArray[w]) && !itensPrincipais.indexOf(novoArray[w])){
-                //   //console.log(itensExtra[w].includes(novoArray[w]))
-                //   throw new Error('Item extra não pode ser pedido sem o principal')
-                // }
-                
-              }
-              catch(error){
-                console.log(error.message)
-              }
+
+            }
+            catch(error){
+              console.log(error.message)
+            }
             }
           }
           return listaDePreco
         }
-
-    retornaQtdDeItens(itens){
-        let qtdItens = []
         
+        retornaQtdDeItens(itens){
+          let qtdItens = []
+          
         try{
           for(let i in itens){
             qtdItens.push(Number(itens[i].split(",").pop()))
@@ -107,7 +117,6 @@ class CaixaDaLanchonete{
                       totalComAcrescimo = (Total + (Total * 0.03)).toFixed(2)
               
                       totalComAcrescimo = totalComAcrescimo.toString()      
-                      console.log(totalComAcrescimo)
               
                       return console.log('R$ '+totalComAcrescimo)
                     }
@@ -130,6 +139,7 @@ class CaixaDaLanchonete{
 
 }
 
-const teste = new CaixaDaLanchonete().calculaValorDaCompra('d',[])
+export { CaixaDaLanchonete };
+
 
 
